@@ -1,3 +1,7 @@
+![Java](https://img.shields.io/badge/java-%23ED8B00.svg?style=for-the-badge&logo=openjdk&logoColor=white)
+![Spring](https://img.shields.io/badge/spring-%236DB33F.svg?style=for-the-badge&logo=spring&logoColor=white)
+![MySQL](https://img.shields.io/badge/mysql-%234479A1.svg?style=for-the-badge&logo=mysql&logoColor=white)
+![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 # Banking Service API
 
 A RESTful backend application built with **Spring Boot 3** and **Java 21** to manage basic banking operations. This project demonstrates CRUD functionality, database integration with MySQL, and the use of modern Java features like Records.
