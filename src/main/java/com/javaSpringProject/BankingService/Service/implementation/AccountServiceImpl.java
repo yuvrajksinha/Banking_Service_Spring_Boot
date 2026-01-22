@@ -7,6 +7,7 @@ import com.javaSpringProject.BankingService.Mapper.AccountMapper;
 import com.javaSpringProject.BankingService.Repository.AccountRepository;
 import com.javaSpringProject.BankingService.Service.AccountService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +40,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public AccountDto deposit(Long id, double amount) {
         Account account = accountRepository
-                .findById(id)
+                .findByIdWithLock(id)
                 .orElseThrow(()->new AccountException("Account does not exist"));
         double total=account.getBalance()+amount;
         account.setBalance(total);
@@ -47,10 +48,11 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.mapToAccountDto(savedAccount);
     }
 
+    @Transactional
     @Override
     public AccountDto withdraw(Long id, double amount) {
         Account account = accountRepository
-                .findById(id)
+                .findByIdWithLock(id)
                 .orElseThrow(()->new AccountException("Account does not exist"));
         if(account.getBalance()<amount){
             throw new AccountException("Insufficient amount");

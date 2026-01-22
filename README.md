@@ -44,7 +44,7 @@ A RESTful backend application built with **Spring Boot 3** and **Java 21** to ma
    ```properties
    spring.datasource.username = your_username
    spring.datasource.password = your_password
-3. **Run the Application**: You can run the project using **Maven** via the terminal Or simply run the `BankingServiceApplication.java` file from your IDE:
+3. **Run the Application**: You can run the project using **Maven** via the terminal or simply run the `BankingServiceApplication.java` file from your IDE:
    ```bash
    mvn spring-boot:run
 ## Testing with Postman

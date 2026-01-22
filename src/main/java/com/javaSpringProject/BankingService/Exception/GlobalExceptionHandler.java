@@ -1,5 +1,6 @@
 package com.javaSpringProject.BankingService.Exception;
 
+import org.springframework.dao.PessimisticLockingFailureException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -36,5 +37,18 @@ public class GlobalExceptionHandler {
         );
 
         return new ResponseEntity<>(errorDetails,HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+
+    //Handle Lock Exceptions
+    @ExceptionHandler(PessimisticLockingFailureException.class)
+    public ResponseEntity<ErrorDetails> handlePessimisticLockingFailureException(PessimisticLockingFailureException pessimistic,WebRequest webRequest){
+        ErrorDetails errorDetails = new ErrorDetails(
+                LocalDateTime.now(),
+                "The account is currently being updated by another transaction. Please try again.",
+                webRequest.getDescription(false),
+                "DATABASE_LOCK_ERROR"
+        );
+
+        return new ResponseEntity<>(errorDetails,HttpStatus.SERVICE_UNAVAILABLE);
     }
 }
