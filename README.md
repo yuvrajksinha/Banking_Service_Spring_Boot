@@ -11,6 +11,9 @@ A RESTful backend application built with **Spring Boot 3** and **Java 21** to ma
 - **Transactions**: Securely deposit and withdraw funds from existing accounts.
 - **Data Persistence**: Uses Spring Data JPA to store account information in a MySQL database.
 - **RESTful Design**: Follows standard HTTP methods and clean API routing.
+- **Concurrency Control**: Implements **Pessimistic Locking** to ensure data integrity during simultaneous withdrawals and deposits.
+- **Transactional Integrity**: Uses `@Transactional` to guarantee Atomicity property, ensuring no data loss during banking operations.
+- **Global Error Handling**: Centralized exception management for account validation and database lock timeouts.
 
 ## Technology Stack
 - **Language**: Java 21
@@ -34,7 +37,11 @@ A RESTful backend application built with **Spring Boot 3** and **Java 21** to ma
 | PUT | `/api/accounts/{id}/withdraw` | Remove money from an account |
 | DELETE | `/api/accounts/{id}` | Close/Delete an account |
 
-
+## Concurrency & Security
+To ensure the safety of funds in a multi-user environment, this API implements:
+- **Pessimistic Locking**: When a withdrawal or deposit starts, the specific account row is locked at the database level using `SELECT FOR UPDATE`. This prevents "Race Conditions" where two users might try to spend the same balance at once.
+- **Lock Timeouts**: Configured via JPA Query Hints to prevent system hangs, returning a `503 Service Unavailable` if a lock cannot be acquired within 3 seconds.
+- **Custom Exceptions**: Handlers for `AccountException` and `PessimisticLockingFailureException` to provide clear, machine-readable error codes.
 
 ## Setup & Installation
 1. **Clone the repository**:
