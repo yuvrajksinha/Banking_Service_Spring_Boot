@@ -2,6 +2,8 @@ package com.javaSpringProject.BankingService.Service.implementation;
 
 import com.javaSpringProject.BankingService.Dto.AccountDto;
 import com.javaSpringProject.BankingService.Entity.Account;
+import com.javaSpringProject.BankingService.Entity.CurrentsAccount;
+import com.javaSpringProject.BankingService.Entity.SavingsAccount;
 import com.javaSpringProject.BankingService.Exception.AccountException;
 import com.javaSpringProject.BankingService.Mapper.AccountMapper;
 import com.javaSpringProject.BankingService.Repository.AccountRepository;
@@ -37,6 +39,7 @@ public class AccountServiceImpl implements AccountService {
         return AccountMapper.mapToAccountDto(account);
     }
 
+    @Transactional
     @Override
     public AccountDto deposit(Long id, double amount) {
         Account account = accountRepository
@@ -54,11 +57,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository
                 .findByIdWithLock(id)
                 .orElseThrow(()->new AccountException("Account does not exist"));
-        if(account.getBalance()<amount){
-            throw new AccountException("Insufficient amount");
-        }
-        double total = account.getBalance()-amount;
-        account.setBalance(total);
+        account.withdraw(amount);
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(account);
     }
@@ -88,6 +87,19 @@ public class AccountServiceImpl implements AccountService {
             throw new AccountException("Account does not exist");
         }
         accountRepository.deleteById(id);
+    }
+
+    @Override
+    public String getAccountType(Long id) {
+        Account account = accountRepository.
+                findById(id).
+                orElseThrow(()->new AccountException("Account not Found"));
+        if(account instanceof SavingsAccount){
+            return "SAVINGS";
+        } else if(account instanceof CurrentsAccount){
+            return "CURRENT";
+        }
+        return "UNKNOWN";
     }
 
 }

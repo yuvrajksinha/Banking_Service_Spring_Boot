@@ -61,4 +61,11 @@ public class AccountController {
         accountService.deleteAccount(id);
         return ResponseEntity.ok("Account deleted successfully!");
     }
+
+    //Get Account Type
+    @GetMapping("/{id}/type")
+    public ResponseEntity<Map<String,String>> getAccountType(@PathVariable Long id){
+        String type = accountService.getAccountType(id);
+        return ResponseEntity.ok(Map.of("Account type",type));
+    }
 }
