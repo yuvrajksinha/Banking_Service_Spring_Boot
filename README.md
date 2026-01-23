@@ -4,7 +4,7 @@
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 # Banking Service API
 
-A RESTful backend application built with **Spring Boot 3** and **Java 21** to manage basic banking operations. This project demonstrates CRUD functionality, database integration with MySQL, and the use of modern Java features like Records.
+A robust RESTful backend application built with **Spring Boot 3** and **Java 21** to manage core banking operations. This project demonstrates full **CRUD functionality** and **database integration with MySQL**, utilizing an inheritance-based architecture to support multiple account types. By leveraging modern Java features like **Records** and **Pattern Matching**, the system provides a unified API that handles specialized business rules, such as overdraft limits, within a clean and scalable codebase.
 
 ## Features
 - **Account Management**: Create, retrieve, and delete bank accounts.
@@ -14,6 +14,8 @@ A RESTful backend application built with **Spring Boot 3** and **Java 21** to ma
 - **Concurrency Control**: Implements **Pessimistic Locking** to ensure data integrity during simultaneous withdrawals and deposits.
 - **Transactional Integrity**: Uses `@Transactional` to guarantee Atomicity property, ensuring no data loss during banking operations.
 - **Global Error Handling**: Centralized exception management for account validation and database lock timeouts.
+- **Polymorphic Accounts**: Supports both `SavingsAccount` (standard rules) and `CurrentAccount` (with overdraft protection). 
+- **Automatic Type Handling**: Uses Java `instanceof` pattern matching to dynamically handle business logic based on account type.
 
 ## Technology Stack
 - **Language**: Java 21
@@ -28,20 +30,22 @@ A RESTful backend application built with **Spring Boot 3** and **Java 21** to ma
 - `Banking_API_Service.postman_collection.json`: A pre-configured Postman collection for testing the API.
 
 ## API Endpoints
-| Method | Endpoint | Description |
-| :--- | :--- | :--- |
-| POST | `/api/accounts` | Create a new bank account |
-| GET | `/api/accounts/{id}` | Get account details by ID |
-| GET | `/api/accounts` | Get all accounts |
-| PUT | `/api/accounts/{id}/deposit` | Add money to an account |
-| PUT | `/api/accounts/{id}/withdraw` | Remove money from an account |
-| DELETE | `/api/accounts/{id}` | Close/Delete an account |
+| Method | Endpoint                      | Description                                   |
+|:-------|:------------------------------|:----------------------------------------------|
+| POST   | `/api/accounts`               | Create a new bank account                     |
+| GET    | `/api/accounts/{id}`          | Get account details by ID                     |
+| GET    | `/api/accounts`               | Get all accounts                              |
+| GET    | `/api/accounts/{id}/type`     | Retrieve type (Savings/Current) of an account |
+| PUT    | `/api/accounts/{id}/deposit`  | Add money to an account                       |
+| PUT    | `/api/accounts/{id}/withdraw` | Remove money from an account                  |
+| DELETE | `/api/accounts/{id}`          | Close/Delete an account                       |
 
 ## Concurrency & Security
 To ensure the safety of funds in a multi-user environment, this API implements:
 - **Pessimistic Locking**: When a withdrawal or deposit starts, the specific account row is locked at the database level using `SELECT FOR UPDATE`. This prevents "Race Conditions" where two users might try to spend the same balance at once.
 - **Lock Timeouts**: Configured via JPA Query Hints to prevent system hangs, returning a `503 Service Unavailable` if a lock cannot be acquired within 3 seconds.
 - **Custom Exceptions**: Handlers for `AccountException` and `PessimisticLockingFailureException` to provide clear, machine-readable error codes.
+- **Type Safety**: Implements abstract class inheritance to ensure distinct business rules for different account products.
 
 ## Setup & Installation
 1. **Clone the repository**:
