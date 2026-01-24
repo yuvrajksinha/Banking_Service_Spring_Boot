@@ -10,12 +10,9 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(name = "account_type")
-@DiscriminatorValue("ACCOUNT")
 @Table(name="accounts")
 @Entity
-public abstract class Account {
+public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,5 +20,7 @@ public abstract class Account {
     @Column(name="account_holder_name")
     private String accountHolderName;
     private double balance;
-    public abstract void withdraw(Double amount);
+    @Column(name="account_type")
+    private String accountType;
+    private Double funds;
 }

@@ -2,8 +2,6 @@ package com.javaSpringProject.BankingService.Service.implementation;
 
 import com.javaSpringProject.BankingService.Dto.AccountDto;
 import com.javaSpringProject.BankingService.Entity.Account;
-import com.javaSpringProject.BankingService.Entity.CurrentsAccount;
-import com.javaSpringProject.BankingService.Entity.SavingsAccount;
 import com.javaSpringProject.BankingService.Exception.AccountException;
 import com.javaSpringProject.BankingService.Mapper.AccountMapper;
 import com.javaSpringProject.BankingService.Repository.AccountRepository;
@@ -13,7 +11,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -57,7 +54,16 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository
                 .findByIdWithLock(id)
                 .orElseThrow(()->new AccountException("Account does not exist"));
-        account.withdraw(amount);
+        if("SAVINGS".equalsIgnoreCase(account.getAccountType())){
+            if(account.getBalance() < amount){
+                throw new AccountException("Insufficient Balance");
+            }
+        } else {
+            if((account.getBalance()+account.getFunds()) < amount){
+                throw new AccountException("Insufficient Funds");
+            }
+        }
+        account.setBalance(account.getBalance()-amount);
         Account savedAccount = accountRepository.save(account);
         return AccountMapper.mapToAccountDto(account);
     }
@@ -94,12 +100,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountRepository.
                 findById(id).
                 orElseThrow(()->new AccountException("Account not Found"));
-        if(account instanceof SavingsAccount){
-            return "SAVINGS";
-        } else if(account instanceof CurrentsAccount){
-            return "CURRENT";
-        }
-        return "UNKNOWN";
+        return account.getAccountType();
     }
 
 }

@@ -4,7 +4,7 @@
 ![Postman](https://img.shields.io/badge/Postman-FF6C37?style=for-the-badge&logo=postman&logoColor=white)
 # Banking Service API
 
-A robust RESTful backend application built with **Spring Boot 3** and **Java 21** to manage core banking operations. This project demonstrates full **CRUD functionality** and **database integration with MySQL**, utilizing an inheritance-based architecture to support multiple account types. By leveraging modern Java features like **Records** and **Pattern Matching**, the system provides a unified API that handles specialized business rules, such as overdraft limits, within a clean and scalable codebase.
+A robust RESTful backend application built with **Spring Boot 3** and **Java 21** to manage core banking operations. This project demonstrates full **CRUD functionality** and **database integration with MySQL**, support multiple account types. By leveraging modern Java feature like **Records**, the system provides a unified API that handles specialized business rules, such as overdraft limits, within a clean and scalable codebase.
 
 ## Features
 - **Account Management**: Create, retrieve, and delete bank accounts.
@@ -15,7 +15,7 @@ A robust RESTful backend application built with **Spring Boot 3** and **Java 21*
 - **Transactional Integrity**: Uses `@Transactional` to guarantee Atomicity property, ensuring no data loss during banking operations.
 - **Global Error Handling**: Centralized exception management for account validation and database lock timeouts.
 - **Polymorphic Accounts**: Supports both `SavingsAccount` (standard rules) and `CurrentAccount` (with overdraft protection). 
-- **Automatic Type Handling**: Uses Java `instanceof` pattern matching to dynamically handle business logic based on account type.
+- **Automatic Type Handling**: Handle business logic based on account type.
 
 ## Technology Stack
 - **Language**: Java 21
@@ -45,7 +45,6 @@ To ensure the safety of funds in a multi-user environment, this API implements:
 - **Pessimistic Locking**: When a withdrawal or deposit starts, the specific account row is locked at the database level using `SELECT FOR UPDATE`. This prevents "Race Conditions" where two users might try to spend the same balance at once.
 - **Lock Timeouts**: Configured via JPA Query Hints to prevent system hangs, returning a `503 Service Unavailable` if a lock cannot be acquired within 3 seconds.
 - **Custom Exceptions**: Handlers for `AccountException` and `PessimisticLockingFailureException` to provide clear, machine-readable error codes.
-- **Type Safety**: Implements abstract class inheritance to ensure distinct business rules for different account products.
 
 ## Setup & Installation
 1. **Clone the repository**:
