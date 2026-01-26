@@ -13,6 +13,6 @@ package com.javaSpringProject.BankingService.Dto;
 //    private double balance;
 //}
 
-public record AccountDto(Long id,String accountHolderName,double balance,String accountType,Double funds){}
+public record AccountDto(Long id,String accountType,String accountNumber,String branchIfsc,double balance,double funds){}
 
 

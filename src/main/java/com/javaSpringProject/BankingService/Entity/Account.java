@@ -17,10 +17,16 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name="account_holder_name")
-    private String accountHolderName;
-    private double balance;
     @Column(name="account_type")
     private String accountType;
-    private Double funds;
+    @Column(name="account_number")
+    private String accountNumber;
+    @Column(name="Branch_IFSC")
+    private String branchIfsc;
+    private double balance;
+    private double funds;
+
+    @ManyToOne(fetch=FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

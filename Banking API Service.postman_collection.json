@@ -17,7 +17,7 @@
         "header": [],
         "body": {
           "mode": "raw",
-          "raw": "{\r\n    \"accountHolderName\":\"Steve\",\r\n    \"balance\":500,\r\n    \"accountType\":\"CURRENT\",\r\n    \"funds\":1000\r\n}",
+          "raw": "{\r\n    \"userDto\" : {\r\n        \"firstName\" : \"Test\",\r\n        \"middleName\" : \"User\",\r\n        \"lastName\" : \"DeleteMe\",\r\n        \"dateOfBirth\" : \"2000-01-01\",\r\n        \"gender\" : \"OTHER\",\r\n        \"prefix\" : \"Mx.\"\r\n    },\r\n    \"contactDto\" : {\r\n        \"email\" : \"test.delete@example.com\",\r\n        \"phoneNumber1\" : \"0000000000\",\r\n        \"phoneNumber2\" : \"\",\r\n        \"addressLine1\" : \"123 Ghost Street\",\r\n        \"addressLine2\" : \"Void Area\",\r\n        \"city\" : \"Null City\",\r\n        \"landmark\" : \"Near the Exit\",\r\n        \"pincode\" : \"000000\",\r\n        \"state\" : \"None\"\r\n    },\r\n    \"accountDto\" : {\r\n        \"accountType\" : \"SAVINGS\",\r\n        \"accountNumber\" : \"TEMP-999\",\r\n        \"branchIfsc\" : \"TEST0001\",\r\n        \"balance\" : 100.0,\r\n        \"funds\" : 0.0\r\n    }\r\n}",
           "options": {
             "raw": {
               "language": "json"
@@ -25,7 +25,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/api/accounts",
+          "raw": "http://localhost:8080/api/accounts/register",
           "protocol": "http",
           "host": [
             "localhost"
@@ -33,7 +33,8 @@
           "port": "8080",
           "path": [
             "api",
-            "accounts"
+            "accounts",
+            "register"
           ]
         }
       },
@@ -115,7 +116,7 @@
           }
         },
         "url": {
-          "raw": "http://localhost:8080/api/accounts/8/withdraw",
+          "raw": "http://localhost:8080/api/accounts/1/withdraw",
           "protocol": "http",
           "host": [
             "localhost"
@@ -124,7 +125,7 @@
           "path": [
             "api",
             "accounts",
-            "8",
+            "1",
             "withdraw"
           ]
         }
@@ -163,7 +164,7 @@
         "method": "DELETE",
         "header": [],
         "url": {
-          "raw": "http://localhost:8080/api/accounts/7",
+          "raw": "http://localhost:8080/api/accounts/4",
           "protocol": "http",
           "host": [
             "localhost"
@@ -172,7 +173,7 @@
           "path": [
             "api",
             "accounts",
-            "7"
+            "4"
           ]
         }
       },
@@ -180,21 +181,14 @@
     },
     {
       "name": "Get Account Type",
-      "protocolProfileBehavior": {
-        "disableBodyPruning": true
-      },
       "request": {
         "auth": {
           "type": "noauth"
         },
         "method": "GET",
         "header": [],
-        "body": {
-          "mode": "raw",
-          "raw": "{\r\n    \"accountHolderName\":\"Sanjay\",\r\n    \"balance\":30000\r\n}"
-        },
         "url": {
-          "raw": "http://localhost:8080/api/accounts/2/type",
+          "raw": "http://localhost:8080/api/accounts/1/type",
           "protocol": "http",
           "host": [
             "localhost"
@@ -203,8 +197,127 @@
           "path": [
             "api",
             "accounts",
-            "2",
+            "1",
             "type"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get User Profile",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/accounts/user/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "accounts",
+            "user",
+            "1"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Transfer Money",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"sourceId\": 1,\r\n    \"targetId\": 2,\r\n    \"amount\": 500.0\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/accounts/transfer",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "accounts",
+            "transfer"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Add account",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"accountType\": \"SAVINGS\",\r\n    \"accountNumber\": \"ACC3521\",\r\n    \"branchIfsc\": \"SBI0101\",\r\n    \"balance\": 1000.0,\r\n    \"funds\": 500.0\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/accounts/user/2/addAccount",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "accounts",
+            "user",
+            "2",
+            "addAccount"
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Get Accounts of User",
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/accounts/user/2/accounts",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "accounts",
+            "user",
+            "2",
+            "accounts"
           ]
         }
       },

@@ -1,6 +1,9 @@
 package com.javaSpringProject.BankingService.Controller;
 
 import com.javaSpringProject.BankingService.Dto.AccountDto;
+import com.javaSpringProject.BankingService.Dto.TransferDto;
+import com.javaSpringProject.BankingService.Dto.UserDto;
+import com.javaSpringProject.BankingService.Dto.UserRegistrationDto;
 import com.javaSpringProject.BankingService.Service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,16 +16,35 @@ import java.util.Map;
 @RequestMapping("/api/accounts")
 public class AccountController {
 
-    private AccountService accountService;
+    private final AccountService accountService;
 
     public AccountController(AccountService accountService) {
         this.accountService = accountService;
     }
 
-    //Add account REST API
-    @PostMapping
-    public ResponseEntity<AccountDto> addAccount(@RequestBody AccountDto accountDto){
-        return new ResponseEntity<>(accountService.createAccount(accountDto), HttpStatus.CREATED);
+    //Registration REST API
+    @PostMapping("/register")
+    public ResponseEntity<UserDto> createAccount(@RequestBody UserRegistrationDto userRegistrationDto){
+        return new ResponseEntity<>(accountService.createAccount(userRegistrationDto), HttpStatus.CREATED);
+    }
+
+    //Add Account by User id REST API
+    @PostMapping("user/{userId}/addAccount")
+    public ResponseEntity<AccountDto> addAccountById(@PathVariable Long userId,@RequestBody AccountDto accountDto){
+        return new ResponseEntity<>(accountService.addAccountById(userId,accountDto),HttpStatus.CREATED);
+    }
+
+    //Get User Profile REST API
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<UserDto> getUserProfile(@PathVariable Long userId){
+        return ResponseEntity.ok(accountService.getUserProfile(userId));
+    }
+
+    //Transfer REST API
+    @PostMapping("/transfer")
+    public ResponseEntity<String> transferMoney(@RequestBody TransferDto transferDto){
+        accountService.transferMoney(transferDto.sourceId(), transferDto.targetId(), transferDto.amount());
+        return ResponseEntity.ok("Transferred successfully!");
     }
 
     //Get Account REST API
@@ -30,6 +52,13 @@ public class AccountController {
     public ResponseEntity<AccountDto> getAccountById(@PathVariable Long id){
         AccountDto accountDto = accountService.getAccountById(id);
         return ResponseEntity.ok(accountDto);
+    }
+
+    //Get Accounts with User Id REST API
+    @GetMapping("user/{userId}/accounts")
+    public ResponseEntity<List<AccountDto>> getAccountsByUserId(@PathVariable Long userId){
+        List<AccountDto> accounts = accountService.getAccountsByUserId(userId);
+        return ResponseEntity.ok(accounts);
     }
 
     //Deposit REST API
