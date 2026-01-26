@@ -28,7 +28,14 @@ A robust RESTful backend application built with **Spring Boot 3** and **Java 21*
 - **Testing**: Postman
 
 ## Project Structure
-- `src/main/java`: Contains the controller, service, and repository layers.
+- `src/main/java`:
+   - `Controller`: REST API entry points (`AccountController`).
+   - `Entity`: Relational data models (`User`, `Contact`, `Account`).
+   - `Dto`: Immutable Java Records for data transfer.
+   - `Mapper`: Logic for converting between Entities and DTOs.
+   - `Repository`: Data access layer with Pessimistic Locking queries.
+   - `Service`: Core business logic and transaction orchestration.
+   - `Exception`: Centralized global error handling.
 - `src/main/resources`: Contains database configurations.
 - `Banking_API_Service.postman_collection.json`: A pre-configured Postman collection for testing the API.
 
